@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Biblioteca de Formación</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%2317231C'/%3E%3Cpath d='M8 16c8-4 16-4 24 0v34c-8-4-16-4-24 0V16z' fill='%23F2ECD9'/%3E%3Cpath d='M56 16c-8-4-16-4-24 0v34c8-4 16-4 24 0V16z' fill='%23F2ECD9'/%3E%3Cpath d='M32 16v34' stroke='%23B08D3E' stroke-width='2'/%3E%3Cpath d='M12 22c5-2 10-2 15 0M12 28c5-2 10-2 15 0M12 34c5-2 10-2 15 0' stroke='%237A2438' stroke-width='1.4' fill='none'/%3E%3Cpath d='M37 22c5-2 10-2 15 0M37 28c5-2 10-2 15 0M37 34c5-2 10-2 15 0' stroke='%237A2438' stroke-width='1.4' fill='none'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2317231C'/%3E%3Cpath d='M8 16c8-4 16-4 24 0v34c-8-4-16-4-24 0V16z' fill='%23F2ECD9'/%3E%3Cpath d='M56 16c-8-4-16-4-24 0v34c8-4 16-4 24 0V16z' fill='%23F2ECD9'/%3E%3Cpath d='M32 16v34' stroke='%23B08D3E' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Source+Serif+4:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#17231C;
+    --bg2:#1E2E24;
+    --bg3:#243629;
+    --card:#F2ECD9;
+    --card-line:#C9BE9E;
+    --ink:#2B2A22;
+    --ink-soft:#5b5847;
+    --brass:#B08D3E;
+    --brass-light:#D4B36A;
+    --burgundy:#7A2438;
+    --burgundy-light:#9C3A50;
+    --sage:#5C7A5E;
+    --text-light:#E9E3CF;
+    --text-dim:#9FAE9C;
+    --radius:3px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(176,141,62,0.10), transparent 45%),
+      radial-gradient(ellipse at 90% 0%, rgba(122,36,56,0.10), transparent 40%),
+      var(--bg);
+    color:var(--text-light);
+    font-family:'Source Serif 4', Georgia, serif;
+    min-height:100vh;
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .fade-in{ animation: fadeIn .5s ease both; }
+  }
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  a{color:inherit;}
+  ::selection{ background:var(--brass); color:var(--bg); }
+
+  /* ---------- Header / hero ---------- */
+  header.hero{
+    padding:52px 24px 34px;
+    border-bottom:1px solid rgba(176,141,62,0.25);
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-inner{ max-width:1100px; margin:0 auto; position:relative; }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    font-size:11px;
+    color:var(--brass-light);
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px; height:1px;
+    background:var(--brass-light);
+    display:inline-block;
+  }
+  h1.title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(34px, 5.2vw, 58px);
+    line-height:1.02;
+    margin:0 0 10px;
+    color:var(--text-light);
+  }
+  h1.title em{
+    font-style:italic;
+    font-weight:500;
+    color:var(--brass-light);
+  }
+  .subtitle{
+    color:var(--text-dim);
+    font-size:16px;
+    max-width:520px;
+    margin:0 0 30px;
+  }
+  .hero-actions{ display:flex; flex-wrap:wrap; gap:10px; }
+
+  button, .btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:.03em;
+    border-radius:var(--radius);
+    border:1px solid rgba(176,141,62,0.4);
+    background:transparent;
+    color:var(--text-light);
+    padding:11px 16px;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition:border-color .15s ease, background .15s ease, transform .1s ease;
+  }
+  button:hover{ border-color:var(--brass-light); background:rgba(176,141,62,0.08); }
+  button:active{ transform:translateY(1px); }
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{
+    outline:2px solid var(--brass-light); outline-offset:2px;
+  }
+  .btn-primary{
+    background:var(--brass);
+    border-color:var(--brass);
+    color:#1a1408;
+    font-weight:600;
+  }
+  .btn-primary:hover{ background:var(--brass-light); border-color:var(--brass-light); }
+  .btn-ghost{ border-color:rgba(233,227,207,0.25); }
+
+  /* ---------- Stats strip ---------- */
+  .stats{
+    max-width:1100px; margin:0 auto;
+    padding:26px 24px 0;
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
+    gap:1px;
+    background:rgba(176,141,62,0.25);
+    border:1px solid rgba(176,141,62,0.25);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  .stat{
+    background:var(--bg2);
+    padding:18px 20px;
+  }
+  .stat .num{
+    font-family:'Fraunces', serif;
+    font-size:30px;
+    font-weight:600;
+    color:var(--text-light);
+    display:block;
+    line-height:1;
+  }
+  .stat .lbl{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+    margin-top:6px;
+    display:block;
+  }
+
+  /* ---------- Search / filters (card catalog drawer) ---------- */
+  .drawer{
+    max-width:1100px; margin:30px auto 0; padding:0 24px;
+  }
+  .drawer-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+    margin-bottom:8px;
+  }
+  .search-row{
+    display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px;
+  }
+  .search-box{
+    flex:1 1 280px;
+    position:relative;
+  }
+  .search-box input{
+    width:100%;
+    padding:13px 14px 13px 40px;
+    background:var(--bg2);
+    border:1px solid rgba(176,141,62,0.3);
+    border-radius:var(--radius);
+    color:var(--text-light);
+    font-family:'Source Serif 4', serif;
+    font-size:15px;
+  }
+  .search-box input::placeholder{ color:var(--text-dim); }
+  .search-box .icon{
+    position:absolute; left:13px; top:50%; transform:translateY(-50%);
+    color:var(--brass-light); pointer-events:none;
+  }
+  .filters{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:10px;
+  }
+  select{
+    width:100%;
+    padding:11px 12px;
+    background:var(--bg2);
+    border:1px solid rgba(176,141,62,0.3);
+    border-radius:var(--radius);
+    color:var(--text-light);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    cursor:pointer;
+  }
+  .filters-footer{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-top:12px; flex-wrap:wrap; gap:8px;
+  }
+  .result-count{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--text-dim);
+  }
+  .clear-link{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--brass-light);
+    background:none; border:none; cursor:pointer; padding:0;
+    text-decoration:underline; text-underline-offset:3px;
+  }
+
+  /* ---------- Cards grid ---------- */
+  main.catalog{
+    max-width:1100px; margin:0 auto; padding:26px 24px 80px;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+    gap:16px;
+  }
+  .course-card{
+    background:var(--card);
+    color:var(--ink);
+    border-radius:2px;
+    padding:18px 18px 16px;
+    position:relative;
+    box-shadow:0 6px 16px rgba(0,0,0,0.28), 0 1px 0 rgba(255,255,255,0.04) inset;
+    border-top:6px solid var(--sage);
+    cursor:pointer;
+    min-height:168px;
+    display:flex;
+    flex-direction:column;
+  }
+  .course-card[data-estado="completado"]{ border-top-color:var(--sage); }
+  .course-card[data-estado="en_curso"]{ border-top-color:var(--brass); }
+  .course-card[data-estado="pendiente"]{ border-top-color:var(--burgundy); }
+
+  .course-card::before{
+    content:"";
+    position:absolute; left:14px; right:14px; top:12px;
+    border-top:1px solid var(--card-line);
+    opacity:.6;
+  }
+  .stamp{
+    position:absolute; top:14px; right:14px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:9px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    border:1.4px solid var(--burgundy);
+    color:var(--burgundy);
+    padding:3px 6px;
+    border-radius:2px;
+    transform:rotate(4deg);
+    opacity:.85;
+  }
+  .course-card[data-estado="completado"] .stamp{ border-color:var(--sage); color:#3d5a3f; }
+  .course-card[data-estado="en_curso"] .stamp{ border-color:var(--brass); color:#8a6a1f; }
+
+  .card-title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:18px;
+    line-height:1.22;
+    margin:20px 0 4px;
+    padding-right:70px;
+  }
+  .card-inst{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-bottom:auto;
+    padding-bottom:10px;
+  }
+  .card-meta{
+    display:flex; flex-wrap:wrap; gap:6px 10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    color:var(--ink-soft);
+    border-top:1px dashed var(--card-line);
+    padding-top:10px;
+    margin-top:8px;
+  }
+  .card-meta span{ white-space:nowrap; }
+  .card-tags{
+    display:flex; flex-wrap:wrap; gap:6px;
+    margin-top:8px;
+  }
+  .card-cat{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:9.5px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    background:rgba(43,42,34,0.08);
+    padding:3px 8px;
+    border-radius:10px;
+    width:fit-content;
+    color:var(--ink-soft);
+  }
+  .card-ambito{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:9.5px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    padding:3px 8px;
+    border-radius:10px;
+    width:fit-content;
+    color:#fff;
+  }
+  .card-ambito[data-ambito="trabajo"]{ background:#7A5A1E; }
+  .card-ambito[data-ambito="espiritualidad"]{ background:#3E5C4A; }
+  .card-ambito[data-ambito="personal"]{ background:var(--burgundy); }
+  .card-ambito[data-ambito="otro"]{ background:#4A4A40; }
+
+  /* ---------- Ambito chips ---------- */
+  .ambito-chips{
+    display:flex; flex-wrap:wrap; gap:8px;
+    margin:14px 0 4px;
+  }
+  .chip{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:.02em;
+    padding:8px 14px;
+    border-radius:20px;
+    border:1px solid rgba(176,141,62,0.35);
+    background:transparent;
+    color:var(--text-dim);
+    cursor:pointer;
+  }
+  .chip:hover{ border-color:var(--brass-light); color:var(--text-light); }
+  .chip.active{
+    background:var(--brass);
+    border-color:var(--brass);
+    color:#1a1408;
+    font-weight:600;
+  }
+
+  .empty-state{
+    grid-column:1/-1;
+    text-align:center;
+    padding:60px 20px;
+    color:var(--text-dim);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+  }
+  .empty-state .big{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:22px;
+    color:var(--text-light);
+    display:block;
+    margin-bottom:8px;
+  }
+
+  /* ---------- Floating add button ---------- */
+  .fab{
+    position:fixed; right:26px; bottom:26px;
+    width:56px; height:56px;
+    border-radius:50%;
+    background:var(--burgundy);
+    border:1px solid var(--burgundy-light);
+    color:var(--text-light);
+    font-size:26px;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 8px 22px rgba(0,0,0,0.4);
+    z-index:40;
+  }
+  .fab:hover{ background:var(--burgundy-light); }
+
+  /* ---------- Modal ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(10,15,11,0.72);
+    display:none; align-items:flex-start; justify-content:center;
+    padding:40px 16px; overflow-y:auto; z-index:50;
+    backdrop-filter:blur(2px);
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal{
+    background:var(--bg2);
+    border:1px solid rgba(176,141,62,0.3);
+    border-radius:var(--radius);
+    max-width:560px; width:100%;
+    padding:28px 26px 26px;
+  }
+  .modal h2{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    margin:0 0 18px;
+    font-size:24px;
+  }
+  .field{ margin-bottom:14px; }
+  .field label{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+    margin-bottom:6px;
+  }
+  .field input, .field textarea, .field select{
+    width:100%;
+    padding:11px 12px;
+    background:var(--bg3);
+    border:1px solid rgba(176,141,62,0.3);
+    border-radius:var(--radius);
+    color:var(--text-light);
+    font-family:'Source Serif 4', serif;
+    font-size:14.5px;
+  }
+  .field textarea{ resize:vertical; min-height:64px; font-family:inherit; }
+  .field input[type="file"]{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    padding:9px 10px;
+  }
+  .archivo-actual{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--text-dim);
+    margin-top:6px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .archivo-actual .quitar-archivo{
+    background:none; border:none; padding:0;
+    color:var(--burgundy-light);
+    text-decoration:underline; text-underline-offset:2px;
+    cursor:pointer; font-size:11.5px;
+  }
+  .pdf-btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    background:rgba(43,42,34,0.08);
+    border:1px solid var(--card-line);
+    color:var(--ink);
+    padding:3px 8px;
+    border-radius:10px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .pdf-btn:hover{ background:rgba(43,42,34,0.16); }
+  .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .modal-actions{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-top:22px; gap:10px; flex-wrap:wrap;
+  }
+  .modal-actions .right{ display:flex; gap:8px; }
+  .danger{ color:var(--burgundy-light); border-color:rgba(122,36,56,0.5); }
+  .danger:hover{ background:rgba(122,36,56,0.12); border-color:var(--burgundy-light); }
+
+  .toast{
+    position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(20px);
+    background:var(--brass); color:#1a1408;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    padding:11px 18px;
+    border-radius:var(--radius);
+    opacity:0; pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
+    z-index:60;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  footer{
+    text-align:center;
+    color:var(--text-dim);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    padding:20px;
+    border-top:1px solid rgba(176,141,62,0.15);
+  }
+
+  @media (max-width:520px){
+    .field-row{ grid-template-columns:1fr; }
+    header.hero{ padding:38px 18px 26px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner fade-in">
+    <div class="eyebrow">Catálogo personal</div>
+    <h1 class="title">Mi <em>Biblioteca</em><br>de Formación</h1>
+    <p class="subtitle">Un mismo catálogo para toda tu documentación: cursos de trabajo, formación personal y espiritualidad, cada uno con su ámbito propio. Todo se guarda en un archivo <code>datos.json</code> exportable y sincronizable.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" id="btnAdd">＋ Añadir curso</button>
+      <button class="btn-ghost" id="btnUpdate" title="Recarga datos.json del repositorio">⟳ Actualizar desde GitHub</button>
+      <button class="btn-ghost" id="btnExport">⇩ Exportar JSON</button>
+      <button class="btn-ghost" id="btnImport">⇧ Importar JSON</button>
+      <input type="file" id="fileImport" accept="application/json" style="display:none;">
+    </div>
+  </div>
+</header>
+
+<section class="stats fade-in" id="stats"></section>
+
+<div class="drawer fade-in">
+  <div class="drawer-label">Buscar en el catálogo</div>
+  <div class="search-row">
+    <div class="search-box">
+      <span class="icon">🔎</span>
+      <input type="text" id="searchInput" placeholder="Buscar por título, institución o categoría…">
+    </div>
+  </div>
+  <div class="ambito-chips" id="ambitoChips">
+    <button type="button" class="chip active" data-ambito="">Todos</button>
+    <button type="button" class="chip" data-ambito="trabajo">💼 Trabajo</button>
+    <button type="button" class="chip" data-ambito="espiritualidad">🕊️ Espiritualidad</button>
+    <button type="button" class="chip" data-ambito="personal">🏡 Personal</button>
+    <button type="button" class="chip" data-ambito="otro">Otro</button>
+  </div>
+  <div class="filters">
+    <select id="filterCategoria"><option value="">Categoría (todas)</option></select>
+    <select id="filterInstitucion"><option value="">Institución (todas)</option></select>
+    <select id="filterAnio"><option value="">Año (todos)</option></select>
+    <select id="filterEstado">
+      <option value="">Estado (todos)</option>
+      <option value="completado">Completado</option>
+      <option value="en_curso">En curso</option>
+      <option value="pendiente">Pendiente</option>
+    </select>
+    <select id="filterModalidad">
+      <option value="">Modalidad (todas)</option>
+      <option value="online">Online</option>
+      <option value="presencial">Presencial</option>
+      <option value="mixta">Mixta</option>
+    </select>
+    <select id="sortBy">
+      <option value="fecha_desc">Ordenar: más recientes</option>
+      <option value="fecha_asc">Ordenar: más antiguos</option>
+      <option value="titulo">Ordenar: título (A-Z)</option>
+      <option value="horas_desc">Ordenar: más horas</option>
+    </select>
+  </div>
+  <div class="filters-footer">
+    <span class="result-count" id="resultCount"></span>
+    <button class="clear-link" id="btnClearFilters">Limpiar filtros</button>
+  </div>
+</div>
+
+<main class="catalog">
+  <div class="grid" id="grid"></div>
+</main>
+
+<button class="fab" id="fabAdd" title="Añadir curso" aria-label="Añadir curso">＋</button>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2 id="modalTitle">Nuevo curso</h2>
+    <form id="courseForm">
+      <input type="hidden" id="courseId">
+      <div class="field">
+        <label for="fTitulo">Título del curso</label>
+        <input type="text" id="fTitulo" required>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="fAmbito">Ámbito</label>
+          <select id="fAmbito">
+            <option value="trabajo">💼 Trabajo</option>
+            <option value="espiritualidad">🕊️ Espiritualidad</option>
+            <option value="personal">🏡 Personal</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fCategoria">Categoría</label>
+          <input type="text" id="fCategoria" list="catList" placeholder="Ej. Programación, Retiro…">
+          <datalist id="catList"></datalist>
+        </div>
+      </div>
+      <div class="field">
+        <label for="fInstitucion">Institución / entidad</label>
+        <input type="text" id="fInstitucion" placeholder="Empresa, plataforma, parroquia, diócesis…">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="fInicio">Fecha inicio</label>
+          <input type="date" id="fInicio">
+        </div>
+        <div class="field">
+          <label for="fFin">Fecha fin</label>
+          <input type="date" id="fFin">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="fHoras">Horas</label>
+          <input type="number" id="fHoras" min="0" step="0.5">
+        </div>
+        <div class="field">
+          <label for="fEstado">Estado</label>
+          <select id="fEstado">
+            <option value="completado">Completado</option>
+            <option value="en_curso">En curso</option>
+            <option value="pendiente">Pendiente</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="fModalidad">Modalidad</label>
+          <select id="fModalidad">
+            <option value="">—</option>
+            <option value="online">Online</option>
+            <option value="presencial">Presencial</option>
+            <option value="mixta">Mixta</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fEnlace">Enlace externo (opcional)</label>
+          <input type="url" id="fEnlace" placeholder="https://">
+        </div>
+      </div>
+      <div class="field">
+        <label for="fArchivo">Adjuntar documento (PDF o imagen)</label>
+        <input type="file" id="fArchivo" accept="application/pdf,image/jpeg,image/png,image/webp">
+        <div class="archivo-actual" id="archivoActual"></div>
+      </div>
+      <div class="field">
+        <label for="fNotas">Notas</label>
+        <textarea id="fNotas"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="danger" id="btnDelete" style="display:none;">Eliminar curso</button>
+        <div class="right">
+          <button type="button" class="btn-ghost" id="btnCancel">Cancelar</button>
+          <button type="submit" class="btn-primary">Guardar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  Datos guardados localmente y en <code>datos.json</code> · exporta tras cada cambio importante para mantener el repositorio al día
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  const LS_KEY = "biblioteca_cursos_v1";
+  const REMOTE_URL = "datos.json"; // mismo directorio en GitHub Pages
+
+  let cursos = [];
+  let selectedAmbito = '';
+  let pendingDocumento; // undefined = sin cambios, null = quitar, {modo,...} = nuevo
+
+  function ambitoLabel(a){
+    return { trabajo:'💼 Trabajo', espiritualidad:'🕊️ Espiritualidad', personal:'🏡 Personal', otro:'Otro' }[a] || '';
+  }
+
+  function formatBytes(bytes){
+    if(!bytes) return '0 KB';
+    const kb = bytes/1024;
+    if(kb < 1024) return Math.round(kb) + ' KB';
+    return (kb/1024).toFixed(1) + ' MB';
+  }
+
+  function migrarCursos(lista){
+    return (lista||[]).map(c=>{
+      if(!c.documento && c.archivo){
+        c.documento = { modo:'embebido', nombre:c.archivo.nombre, tipo:c.archivo.tipo||'application/pdf', tamano:c.archivo.tamano, data:c.archivo.data };
+      }
+      delete c.archivo;
+      return c;
+    });
+  }
+
+  function iconoDocumento(doc){
+    if(!doc) return '📎';
+    if(doc.modo==='ruta') return '📎';
+    if((doc.tipo||'').startsWith('image/')) return '🖼️';
+    return '📄';
+  }
+
+  function abrirDocumento(doc){
+    if(!doc) return;
+    if(doc.modo==='ruta'){
+      window.open(doc.ruta, '_blank');
+      return;
+    }
+    try{
+      const dataUrl = doc.data;
+      const [header, base64] = dataUrl.split(',');
+      const mimeMatch = header.match(/data:(.*);base64/);
+      const mime = mimeMatch ? mimeMatch[1] : (doc.tipo || 'application/pdf');
+      const bin = atob(base64);
+      const bytes = new Uint8Array(bin.length);
+      for(let i=0;i<bin.length;i++) bytes[i] = bin.charCodeAt(i);
+      const blob = new Blob([bytes], { type: mime });
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+      setTimeout(()=>URL.revokeObjectURL(url), 60000);
+    }catch(e){
+      showToast('No se pudo abrir el documento');
+    }
+  }
+
+  function uid(){ return 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+  function loadLocal(){
+    try{
+      const raw = localStorage.getItem(LS_KEY);
+      if(raw){ cursos = migrarCursos(JSON.parse(raw).cursos || []); return true; }
+    }catch(e){ console.warn("No se pudo leer localStorage", e); }
+    return false;
+  }
+
+  function saveLocal(){
+    try{
+      localStorage.setItem(LS_KEY, JSON.stringify({ cursos }));
+    }catch(e){
+      console.warn("No se pudo guardar en localStorage", e);
+      showToast('El catálogo pesa demasiado para guardarse en este navegador · exporta el JSON para no perder cambios');
+    }
+  }
+
+  async function loadRemote(showToastOnFail){
+    try{
+      const res = await fetch(REMOTE_URL + "?t=" + Date.now());
+      if(!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      cursos = migrarCursos(data.cursos || []);
+      saveLocal();
+      return true;
+    }catch(e){
+      if(showToastOnFail) showToast("No se encontró datos.json remoto (¿primera vez? usa datos locales)");
+      return false;
+    }
+  }
+
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(()=> t.classList.remove('show'), 2600);
+  }
+
+  // ---------- Render ----------
+  function fmtDate(d){
+    if(!d) return '';
+    const parts = d.split('-');
+    if(parts.length!==3) return d;
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  }
+
+  function estadoLabel(e){
+    return { completado:'Completado', en_curso:'En curso', pendiente:'Pendiente' }[e] || e;
+  }
+
+  function populateFilterOptions(){
+    const cats = [...new Set(cursos.map(c=>c.categoria).filter(Boolean))].sort();
+    const insts = [...new Set(cursos.map(c=>c.institucion).filter(Boolean))].sort();
+    const anios = [...new Set(cursos.map(c=> (c.fechaInicio||c.fechaFin||'').slice(0,4)).filter(Boolean))].sort().reverse();
+
+    fillSelect('filterCategoria', cats, 'Categoría (todas)');
+    fillSelect('filterInstitucion', insts, 'Institución (todas)');
+    fillSelect('filterAnio', anios, 'Año (todos)');
+
+    const dl = document.getElementById('catList');
+    dl.innerHTML = cats.map(c=>`<option value="${escapeHtml(c)}">`).join('');
+  }
+
+  function fillSelect(id, values, placeholder){
+    const sel = document.getElementById(id);
+    const current = sel.value;
+    sel.innerHTML = `<option value="">${placeholder}</option>` + values.map(v=>`<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
+    if(values.includes(current)) sel.value = current;
+  }
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+  }
+
+  function getFiltered(){
+    const q = document.getElementById('searchInput').value.trim().toLowerCase();
+    const cat = document.getElementById('filterCategoria').value;
+    const inst = document.getElementById('filterInstitucion').value;
+    const anio = document.getElementById('filterAnio').value;
+    const estado = document.getElementById('filterEstado').value;
+    const modalidad = document.getElementById('filterModalidad').value;
+    const sortBy = document.getElementById('sortBy').value;
+
+    let list = cursos.filter(c=>{
+      if(selectedAmbito && c.ambito !== selectedAmbito) return false;
+      if(q){
+        const blob = [c.titulo, c.institucion, c.categoria, c.notas].filter(Boolean).join(' ').toLowerCase();
+        if(!blob.includes(q)) return false;
+      }
+      if(cat && c.categoria !== cat) return false;
+      if(inst && c.institucion !== inst) return false;
+      if(anio && (c.fechaInicio||c.fechaFin||'').slice(0,4) !== anio) return false;
+      if(estado && c.estado !== estado) return false;
+      if(modalidad && c.modalidad !== modalidad) return false;
+      return true;
+    });
+
+    list.sort((a,b)=>{
+      if(sortBy==='titulo') return (a.titulo||'').localeCompare(b.titulo||'');
+      if(sortBy==='horas_desc') return (b.horas||0) - (a.horas||0);
+      const da = a.fechaInicio || a.fechaFin || '';
+      const db = b.fechaInicio || b.fechaFin || '';
+      if(sortBy==='fecha_asc') return da.localeCompare(db);
+      return db.localeCompare(da); // fecha_desc default
+    });
+
+    return list;
+  }
+
+  function render(){
+    populateFilterOptions();
+    renderStats();
+    renderChips();
+    renderGrid();
+  }
+
+  function renderChips(){
+    document.querySelectorAll('#ambitoChips .chip').forEach(chip=>{
+      const val = chip.dataset.ambito;
+      const count = val ? cursos.filter(c=>c.ambito===val).length : cursos.length;
+      const base = chip.textContent.replace(/\s*\(\d+\)$/, '');
+      chip.textContent = val ? `${base} (${count})` : `${base} (${count})`;
+      chip.classList.toggle('active', val === selectedAmbito);
+    });
+  }
+
+  function renderStats(){
+    const total = cursos.length;
+    const horas = cursos.reduce((s,c)=> s + (Number(c.horas)||0), 0);
+    const completados = cursos.filter(c=>c.estado==='completado').length;
+    const enCurso = cursos.filter(c=>c.estado==='en_curso').length;
+    const cats = new Set(cursos.map(c=>c.categoria).filter(Boolean)).size;
+    const conDoc = cursos.filter(c=>c.documento).length;
+
+    const stats = [
+      { num: total, lbl:'Cursos registrados' },
+      { num: horas, lbl:'Horas de formación' },
+      { num: completados, lbl:'Completados' },
+      { num: enCurso, lbl:'En curso' },
+      { num: conDoc, lbl:'Con PDF adjunto' },
+    ];
+    document.getElementById('stats').innerHTML = stats.map(s=>`
+      <div class="stat"><span class="num">${s.num}</span><span class="lbl">${s.lbl}</span></div>
+    `).join('');
+  }
+
+  function renderGrid(){
+    const list = getFiltered();
+    const grid = document.getElementById('grid');
+    document.getElementById('resultCount').textContent = `${list.length} de ${cursos.length} curso${cursos.length===1?'':'s'}`;
+
+    if(list.length===0){
+      grid.innerHTML = `<div class="empty-state">
+        <span class="big">${cursos.length===0 ? 'El catálogo está vacío' : 'Sin resultados'}</span>
+        ${cursos.length===0 ? 'Añade tu primer curso con el botón "＋ Añadir curso"' : 'Prueba a limpiar algún filtro'}
+      </div>`;
+      return;
+    }
+
+    grid.innerHTML = list.map(c=>`
+      <article class="course-card" data-estado="${c.estado||''}" data-id="${c.id}">
+        <span class="stamp">${estadoLabel(c.estado)}</span>
+        <h3 class="card-title">${escapeHtml(c.titulo||'Sin título')}</h3>
+        <div class="card-inst">${escapeHtml(c.institucion||'')}</div>
+        <div class="card-meta">
+          ${c.fechaInicio || c.fechaFin ? `<span>📅 ${fmtDate(c.fechaInicio)}${c.fechaFin ? ' → '+fmtDate(c.fechaFin) : ''}</span>` : ''}
+          ${c.horas ? `<span>⏱ ${c.horas}h</span>` : ''}
+          ${c.modalidad ? `<span>${c.modalidad}</span>` : ''}
+          ${c.documento ? `<button type="button" class="pdf-btn" data-id="${c.id}">${iconoDocumento(c.documento)} Ver</button>` : ''}
+        </div>
+        <div class="card-tags">
+          ${c.ambito ? `<span class="card-ambito" data-ambito="${c.ambito}">${ambitoLabel(c.ambito)}</span>` : ''}
+          ${c.categoria ? `<span class="card-cat">${escapeHtml(c.categoria)}</span>` : ''}
+        </div>
+      </article>
+    `).join('');
+
+    grid.querySelectorAll('.course-card').forEach(card=>{
+      card.addEventListener('click', (e)=>{
+        if(e.target.closest('.pdf-btn')) return;
+        openModal(card.dataset.id);
+      });
+    });
+    grid.querySelectorAll('.pdf-btn').forEach(btn=>{
+      btn.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        const c = cursos.find(x=>x.id===btn.dataset.id);
+        if(c && c.documento) abrirDocumento(c.documento);
+      });
+    });
+  }
+
+  // ---------- Modal / form ----------
+  const overlay = document.getElementById('modalOverlay');
+  const form = document.getElementById('courseForm');
+
+  const TIPOS_ADMITIDOS = ['application/pdf','image/jpeg','image/png','image/webp'];
+
+  function openModal(id){
+    form.reset();
+    pendingDocumento = undefined;
+    document.getElementById('btnDelete').style.display = id ? 'inline-flex' : 'none';
+    if(id){
+      const c = cursos.find(x=>x.id===id);
+      if(!c) return;
+      document.getElementById('modalTitle').textContent = 'Editar curso';
+      document.getElementById('courseId').value = c.id;
+      document.getElementById('fTitulo').value = c.titulo||'';
+      document.getElementById('fAmbito').value = c.ambito||'trabajo';
+      document.getElementById('fInstitucion').value = c.institucion||'';
+      document.getElementById('fCategoria').value = c.categoria||'';
+      document.getElementById('fInicio').value = c.fechaInicio||'';
+      document.getElementById('fFin').value = c.fechaFin||'';
+      document.getElementById('fHoras').value = c.horas||'';
+      document.getElementById('fEstado').value = c.estado||'completado';
+      document.getElementById('fModalidad').value = c.modalidad||'';
+      document.getElementById('fEnlace').value = c.enlace||'';
+      document.getElementById('fNotas').value = c.notas||'';
+      renderArchivoActual(c.documento || null);
+    }else{
+      document.getElementById('modalTitle').textContent = 'Nuevo curso';
+      document.getElementById('courseId').value = '';
+      document.getElementById('fEstado').value = 'completado';
+      document.getElementById('fAmbito').value = selectedAmbito || 'trabajo';
+      renderArchivoActual(null);
+    }
+    overlay.classList.add('open');
+    document.getElementById('fTitulo').focus();
+  }
+
+  function renderArchivoActual(documentoActual){
+    const box = document.getElementById('archivoActual');
+    if(documentoActual && pendingDocumento === undefined){
+      box.innerHTML = `${iconoDocumento(documentoActual)} ${escapeHtml(documentoActual.nombre)} (${formatBytes(documentoActual.tamano)}) <button type="button" class="quitar-archivo" id="btnQuitarArchivo">quitar</button>`;
+      document.getElementById('btnQuitarArchivo').addEventListener('click', ()=>{
+        pendingDocumento = null;
+        renderArchivoActual(null);
+      });
+    }else if(pendingDocumento){
+      box.innerHTML = `${iconoDocumento(pendingDocumento)} ${escapeHtml(pendingDocumento.nombre)} (${formatBytes(pendingDocumento.tamano)}) — nuevo`;
+    }else{
+      box.textContent = 'Sin documento adjunto';
+    }
+  }
+
+  document.getElementById('fArchivo').addEventListener('change', (e)=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    if(!TIPOS_ADMITIDOS.includes(file.type)){
+      showToast('Solo se admiten PDF, JPG, PNG o WebP');
+      e.target.value = '';
+      return;
+    }
+    if(file.size > 8*1024*1024){
+      showToast('El archivo pesa más de 8 MB · puede fallar al guardarse en el navegador');
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      pendingDocumento = { modo:'embebido', nombre: file.name, tipo: file.type, tamano: file.size, data: reader.result };
+      renderArchivoActual(pendingDocumento);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  function closeModal(){ overlay.classList.remove('open'); }
+
+  overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeModal(); });
+  document.getElementById('btnCancel').addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && overlay.classList.contains('open')) closeModal(); });
+
+  form.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const id = document.getElementById('courseId').value;
+    const existing = id ? cursos.find(x=>x.id===id) : null;
+
+    let documentoFinal;
+    if(pendingDocumento === undefined){
+      documentoFinal = existing ? existing.documento || null : null;
+    }else{
+      documentoFinal = pendingDocumento; // null (quitado) u objeto nuevo
+    }
+
+    const data = {
+      id: id || uid(),
+      titulo: document.getElementById('fTitulo').value.trim(),
+      ambito: document.getElementById('fAmbito').value,
+      institucion: document.getElementById('fInstitucion').value.trim(),
+      categoria: document.getElementById('fCategoria').value.trim(),
+      fechaInicio: document.getElementById('fInicio').value,
+      fechaFin: document.getElementById('fFin').value,
+      horas: Number(document.getElementById('fHoras').value)||0,
+      estado: document.getElementById('fEstado').value,
+      modalidad: document.getElementById('fModalidad').value,
+      enlace: document.getElementById('fEnlace').value.trim(),
+      notas: document.getElementById('fNotas').value.trim(),
+      documento: documentoFinal,
+    };
+    if(id){
+      const idx = cursos.findIndex(x=>x.id===id);
+      if(idx>-1) cursos[idx] = data;
+    }else{
+      cursos.push(data);
+    }
+    saveLocal();
+    render();
+    closeModal();
+    showToast('Curso guardado · recuerda exportar el JSON para sincronizar');
+  });
+
+  document.getElementById('btnDelete').addEventListener('click', ()=>{
+    const id = document.getElementById('courseId').value;
+    if(!id) return;
+    if(!confirm('¿Eliminar este curso del catálogo?')) return;
+    cursos = cursos.filter(x=>x.id!==id);
+    saveLocal();
+    render();
+    closeModal();
+    showToast('Curso eliminado');
+  });
+
+  // ---------- Toolbar ----------
+  document.getElementById('btnAdd').addEventListener('click', ()=>openModal(null));
+  document.getElementById('fabAdd').addEventListener('click', ()=>openModal(null));
+
+  document.getElementById('btnUpdate').addEventListener('click', async ()=>{
+    showToast('Actualizando desde GitHub…');
+    const ok = await loadRemote(true);
+    if(ok){ render(); showToast('Catálogo actualizado'); }
+  });
+
+  document.getElementById('btnExport').addEventListener('click', ()=>{
+    const blob = new Blob([JSON.stringify({ cursos }, null, 2)], { type:'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'datos.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('datos.json exportado · súbelo a tu repositorio de GitHub');
+  });
+
+  document.getElementById('btnImport').addEventListener('click', ()=>{
+    document.getElementById('fileImport').click();
+  });
+
+  document.getElementById('fileImport').addEventListener('change', (e)=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try{
+        const data = JSON.parse(reader.result);
+        cursos = migrarCursos(data.cursos || []);
+        saveLocal();
+        render();
+        showToast('JSON importado correctamente');
+      }catch(err){
+        showToast('El archivo no es un JSON válido');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  });
+
+  document.getElementById('btnClearFilters').addEventListener('click', ()=>{
+    document.getElementById('searchInput').value = '';
+    ['filterCategoria','filterInstitucion','filterAnio','filterEstado','filterModalidad'].forEach(id=>{
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('sortBy').value = 'fecha_desc';
+    selectedAmbito = '';
+    renderChips();
+    renderGrid();
+  });
+
+  document.getElementById('ambitoChips').addEventListener('click', (e)=>{
+    const chip = e.target.closest('.chip');
+    if(!chip) return;
+    selectedAmbito = chip.dataset.ambito;
+    renderChips();
+    renderGrid();
+  });
+
+  ['searchInput'].forEach(id=> document.getElementById(id).addEventListener('input', renderGrid));
+  ['filterCategoria','filterInstitucion','filterAnio','filterEstado','filterModalidad','sortBy'].forEach(id=>{
+    document.getElementById(id).addEventListener('change', renderGrid);
+  });
+
+  // ---------- Init ----------
+  (async function init(){
+    const hadLocal = loadLocal();
+    if(!hadLocal){
+      await loadRemote(false);
+    }
+    render();
+  })();
+
+})();
+</script>
+</body>
+</html>
