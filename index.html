@@ -453,6 +453,8 @@
     border-radius:10px;
     cursor:pointer;
     white-space:nowrap;
+    text-decoration:none;
+    display:inline-block;
   }
   .pdf-btn:hover{ background:rgba(43,42,34,0.16); }
   .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
@@ -463,6 +465,30 @@
   .modal-actions .right{ display:flex; gap:8px; }
   .danger{ color:var(--burgundy-light); border-color:rgba(122,36,56,0.5); }
   .danger:hover{ background:rgba(122,36,56,0.12); border-color:var(--burgundy-light); }
+
+  .size-row{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:var(--bg3);
+    border:1px solid rgba(176,141,62,0.2);
+    border-radius:var(--radius);
+    padding:10px 12px;
+  }
+  .size-row .info{ min-width:0; }
+  .size-row .info .t{
+    font-family:'Source Serif 4', serif;
+    font-size:14px;
+    color:var(--text-light);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    max-width:340px;
+  }
+  .size-row .info .s{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--brass-light);
+  }
+  .size-row button{
+    font-size:11px; padding:7px 10px; flex-shrink:0;
+  }
 
   .toast{
     position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(20px);
@@ -504,6 +530,7 @@
       <button class="btn-ghost" id="btnUpdate" title="Recarga datos.json del repositorio">⟳ Actualizar desde GitHub</button>
       <button class="btn-ghost" id="btnExport">⇩ Exportar JSON</button>
       <button class="btn-ghost" id="btnImport">⇧ Importar JSON</button>
+      <button class="btn-ghost" id="btnSize">📦 Tamaño del catálogo</button>
       <input type="file" id="fileImport" accept="application/json" style="display:none;">
     </div>
   </div>
@@ -646,6 +673,20 @@
         </div>
       </div>
     </form>
+  </div>
+</div>
+
+<div class="modal-overlay" id="sizeOverlay">
+  <div class="modal" style="max-width:640px;">
+    <h2>Tamaño del catálogo</h2>
+    <p id="sizeSummary" style="font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--text-light); margin-top:-8px;"></p>
+    <div id="sizeList" style="max-height:50vh; overflow-y:auto; display:flex; flex-direction:column; gap:8px;"></div>
+    <div class="modal-actions">
+      <span></span>
+      <div class="right">
+        <button type="button" class="btn-ghost" id="btnCloseSize">Cerrar</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -888,7 +929,8 @@
           ${c.fechaInicio || c.fechaFin ? `<span>📅 ${fmtDate(c.fechaInicio)}${c.fechaFin ? ' → '+fmtDate(c.fechaFin) : ''}</span>` : ''}
           ${c.horas ? `<span>⏱ ${c.horas}h</span>` : ''}
           ${c.modalidad ? `<span>${c.modalidad}</span>` : ''}
-          ${c.documento ? `<button type="button" class="pdf-btn" data-id="${c.id}">${iconoDocumento(c.documento)} Ver</button>` : ''}
+          ${c.documento ? `<button type="button" class="pdf-btn" data-id="${c.id}">${iconoDocumento(c.documento)} Ver (${formatBytes(c.documento.tamano)})</button>` : ''}
+          ${c.enlace ? `<a class="pdf-btn" href="${escapeHtml(c.enlace)}" target="_blank" rel="noopener">🔗 Enlace</a>` : ''}
         </div>
         <div class="card-tags">
           ${c.ambito ? `<span class="card-ambito" data-ambito="${c.ambito}">${ambitoLabel(c.ambito)}</span>` : ''}
@@ -903,7 +945,7 @@
         openModal(card.dataset.id);
       });
     });
-    grid.querySelectorAll('.pdf-btn').forEach(btn=>{
+    grid.querySelectorAll('button.pdf-btn').forEach(btn=>{
       btn.addEventListener('click', (e)=>{
         e.stopPropagation();
         const c = cursos.find(x=>x.id===btn.dataset.id);
@@ -988,7 +1030,11 @@
 
   overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeModal(); });
   document.getElementById('btnCancel').addEventListener('click', closeModal);
-  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && overlay.classList.contains('open')) closeModal(); });
+  document.addEventListener('keydown', (e)=>{
+    if(e.key!=='Escape') return;
+    if(overlay.classList.contains('open')) closeModal();
+    if(sizeOverlay.classList.contains('open')) sizeOverlay.classList.remove('open');
+  });
 
   form.addEventListener('submit', (e)=>{
     e.preventDefault();
@@ -1082,6 +1128,54 @@
     reader.readAsText(file);
     e.target.value = '';
   });
+
+  // ---------- Gestor de tamaño del catálogo ----------
+  const sizeOverlay = document.getElementById('sizeOverlay');
+
+  function totalJsonBytes(){
+    return new Blob([JSON.stringify({ cursos })]).size;
+  }
+
+  function renderSizeManager(){
+    const conDoc = cursos.filter(c=>c.documento).slice().sort((a,b)=> (b.documento.tamano||0) - (a.documento.tamano||0));
+    document.getElementById('sizeSummary').textContent =
+      `datos.json actual: ${formatBytes(totalJsonBytes())} · ${conDoc.length} curso${conDoc.length===1?'':'s'} con documento embebido`;
+
+    const list = document.getElementById('sizeList');
+    if(conDoc.length===0){
+      list.innerHTML = `<p style="color:var(--text-dim); font-size:13px;">Ningún curso tiene documentos embebidos ahora mismo.</p>`;
+      return;
+    }
+    list.innerHTML = conDoc.map(c=>`
+      <div class="size-row" data-id="${c.id}">
+        <div class="info">
+          <div class="t">${escapeHtml(c.titulo||'Sin título')}</div>
+          <div class="s">${iconoDocumento(c.documento)} ${escapeHtml(c.documento.nombre||'')} · ${formatBytes(c.documento.tamano)}</div>
+        </div>
+        <button type="button" class="danger btn-quitar-doc" data-id="${c.id}">Quitar documento</button>
+      </div>
+    `).join('');
+
+    list.querySelectorAll('.btn-quitar-doc').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const c = cursos.find(x=>x.id===btn.dataset.id);
+        if(!c) return;
+        if(!confirm(`¿Quitar el documento embebido de "${c.titulo}"? Podrás añadir un enlace externo en su lugar.`)) return;
+        c.documento = null;
+        saveLocal();
+        render();
+        renderSizeManager();
+        showToast('Documento eliminado del curso · añade un enlace externo si quieres');
+      });
+    });
+  }
+
+  document.getElementById('btnSize').addEventListener('click', ()=>{
+    renderSizeManager();
+    sizeOverlay.classList.add('open');
+  });
+  document.getElementById('btnCloseSize').addEventListener('click', ()=> sizeOverlay.classList.remove('open'));
+  sizeOverlay.addEventListener('click', (e)=>{ if(e.target===sizeOverlay) sizeOverlay.classList.remove('open'); });
 
   document.getElementById('btnClearFilters').addEventListener('click', ()=>{
     document.getElementById('searchInput').value = '';
